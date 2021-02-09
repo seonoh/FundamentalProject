@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.seonoh.fundamentalproject.databinding.WordlistItemBinding
 import java.util.*
 
 
@@ -22,29 +24,36 @@ class WordListAdapter : RecyclerView.Adapter<WordListAdapter.WordViewHolder> {
     }
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
-        val mCurrent = mWordList[position]
-        holder.wordItemView!!.text = mCurrent
+        holder.bind(mWordList[position])
+//        val mCurrent =
+//        holder.wordItemView!!.text = mCurrent
     }
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): WordViewHolder {
-        val mItemView : View = mInflater.inflate(R.layout.wordlist_item,parent,false)
-
-        return WordViewHolder(mItemView, this)
+        return WordViewHolder(
+            DataBindingUtil.inflate(
+                LayoutInflater.from(parent.context),
+                R.layout.wordlist_item,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int {
         return mWordList.size
     }
 
-    inner class WordViewHolder : RecyclerView.ViewHolder{
-        var wordItemView: TextView? = null
-        var mAdapter: WordListAdapter? = null
-        constructor(itemView: View, adapter: WordListAdapter?) {
-            wordItemView = itemView.findViewById(R.id.word)
-            mAdapter = adapter
+    inner class WordViewHolder(private val binding: WordlistItemBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bind(data : String) {
+            binding.run {
+                word.text = data
+                executePendingBindings()
+            }
         }
     }
 }
