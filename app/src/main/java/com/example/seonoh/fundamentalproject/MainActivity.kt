@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         for (i in 0..19) {
             mWordList.addLast("Word $i")
         }
+
         mAdapter = WordListAdapter(this, mWordList)
         binding.recyclerview.run {
             adapter = mAdapter
